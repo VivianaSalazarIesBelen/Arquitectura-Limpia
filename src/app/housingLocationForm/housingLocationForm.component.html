@@ -1,0 +1,38 @@
+<h2>Añadir nueva vivienda</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <label for="name">Nombre</label>
+  <input id="name" type="text" formControlName="name">
+
+  <label for="city">Ciudad</label>
+  <input id="city" type="text" formControlName="city">
+
+  <label for="state">Estado</label>
+  <input id="state" type="text" formControlName="state">
+
+  <label for="availableUnits">Unidades disponibles</label>
+  <input id="availableUnits" type="number" formControlName="availableUnits">
+
+  <label for="price">Precio</label>
+  <input id="price" type="number" formControlName="price">
+
+  <label>
+    <input type="checkbox" formControlName="wifi"> Wifi
+  </label>
+
+  <label>
+    <input type="checkbox" formControlName="laundry"> Lavandería
+  </label>
+
+  <label>
+    <input type="checkbox" formControlName="available"> Disponible
+  </label>
+
+  <button type="submit" [disabled]="submitting">Crear vivienda</button>
+  <button type="button" (click)="cancel()">Cancelar</button>
+
+</form>
+
+<p *ngIf="successMsg">{{ successMsg }}</p>
+<p *ngIf="errorMsg">{{ errorMsg }}</p>

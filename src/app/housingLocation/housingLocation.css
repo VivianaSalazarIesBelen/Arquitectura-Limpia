@@ -1,0 +1,56 @@
+.listing {
+  background: lightcyan;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px cadetblue;
+}
+
+
+.image-container {
+  padding: 10px;
+}
+
+.listing-photo {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 24px 24px 0 0;
+
+}
+
+.content {
+  padding: 15px 20px 20px 20px;
+}
+
+.listing-heading {
+  font-size: 1.1rem;
+  color: darkolivegreen;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.listing-location {
+  font-size: 0.9rem;
+  color: steelblue;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.pin {
+  margin-right: 5px;
+  font-size: 0.8rem;
+}
+
+.btn-details {
+  color: green;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+

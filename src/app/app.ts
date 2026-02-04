@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { DetailsComponent } from './details/details';
+import { HousingLocationFormComponent } from './housingLocationForm/housingLocationForm';
+
+
+export const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'details/:id', component: DetailsComponent },
+  { path: 'add-house', component: HousingLocationFormComponent }
+];
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('house');
-}
+export class App {}
