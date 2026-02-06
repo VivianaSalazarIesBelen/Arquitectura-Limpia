@@ -1,60 +1,66 @@
 import { Injectable } from '@angular/core';
 import { HousingLocation } from './housinglocation';
-import { environment } from '../environments/environment';
 
+export interface HousingProvider {
+  getAllHousingLocations(): Promise<HousingLocation[]>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-// Hace que el servicio sea **singleton** y disponible en toda la app
-export class HousingService {
+export class ResilientHousingService implements HousingProvider {
 
+  // URL de la API (si estuviera disponible)
+  private readonly apiUrl = 'http://localhost:3000/locations';
 
-  url = 'http://localhost:3000/locations';
-  // URL base para la API o json-server donde se almacenan las viviendas
+  // JSON local de respaldo
+  private readonly localUrl = '/assets/db.json';
 
+  // API key para obtener clima (opcional según enunciado)
+  private readonly weatherApiKey = '3fb0b08a688a4a9d96c115901260801';
 
-  // Método que obtiene todas las viviendas
+  // Obtener todas las viviendas
   async getAllHousingLocations(): Promise<HousingLocation[]> {
-    const data = await fetch(this.url);
-    // Hace una petición HTTP GET a la URL para obtener todas las viviendas
-
-    return await data.json() ?? [];
-    // Convierte la respuesta a JSON y devuelve un array de HousingLocation
-    // Si falla, devuelve un array vacío
+    try {
+      // Intento de obtener datos desde la API
+      const response = await fetch(this.apiUrl);
+      if (!response.ok) throw new Error('Servidor fuera de servicio');
+      return await response.json();
+    } catch {
+      // Si falla la API, usar el JSON local
+      console.warn('API caída. Cargando datos locales...');
+      try {
+        const fallback = await fetch(this.localUrl);
+        const data = await fallback.json();
+        return data.locations ? data.locations : data;
+      } catch {
+        console.error('Error total: ni API ni JSON local');
+        return [];
+      }
+    }
   }
 
-
-  // Método que obtiene una vivienda por ID
+  // Obtener vivienda por ID
   async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
-    const data = await fetch(`${this.url}/${id}`);
-    // Hace petición GET a la URL específica de la vivienda por ID
-
-    return await data.json() ?? {};
-    // Convierte la respuesta a JSON y devuelve la vivienda
-    // Si no hay datos, devuelve un objeto vacío
+    try {
+      const response = await fetch(`${this.apiUrl}/${id}`);
+      return await response.json();
+    } catch {
+      const all = await this.getAllHousingLocations();
+      return all.find(loc => loc.id === id);
+    }
   }
 
-
-  // Método que simula enviar un formulario de solicitud
-  submitApplication(firstName: string, lastName: string, email: string) {
-    console.log(firstName, lastName, email);
-    // Por ahora solo imprime los datos en consola
-  }
-
-
-  // Método que obtiene datos del clima para coordenadas específicas
+  // Obtener clima (opcional)
   async getWeather(lat: number, lon: number): Promise<any> {
-    const apiKey = environment.weatherApiKey;
-    // Obtiene la API key del archivo de entorno
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${this.weatherApiKey}&q=${lat},${lon}&lang=es`
+    );
+    return await response.json();
+  }
 
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}`;
-    // Construye la URL de la API de WeatherAPI con latitud y longitud
-
-    const res = await fetch(url);
-    // Hace petición GET a la API de clima
-
-    return await res.json();
-    // Convierte la respuesta a JSON y devuelve los datos del clima
+  // Simulación de envío de formulario
+  submitApplication(firstName: string, lastName: string, email: string) {
+    console.log(`Solicitud guardada localmente: ${firstName} ${lastName}`);
   }
 }

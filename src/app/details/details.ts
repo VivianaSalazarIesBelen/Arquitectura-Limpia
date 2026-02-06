@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import { AfterViewInit } from '@angular/core';
-import { HousingService } from '../housing.service';
+import { ResilientHousingService } from '../housing.service';
 import { HousingLocation } from '../housinglocation';
 
 
@@ -98,7 +98,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   // Inyecta ActivatedRoute para leer parámetros de la URL (ej. ID de vivienda)
 
-  housingService = inject(HousingService);
+  housingService = inject(ResilientHousingService);
   // Inyecta HousingService para obtener datos de vivienda y clima
 
   housingLocation: HousingLocation | undefined;
