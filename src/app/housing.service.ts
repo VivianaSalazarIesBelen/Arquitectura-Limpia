@@ -14,7 +14,7 @@ export class ResilientHousingService implements HousingProvider {
   private readonly apiUrl = 'http://localhost:3000/locations';
 
   // JSON local de respaldo
-  private readonly localUrl = '/assets/db.json';
+  private readonly localUrl = 'assets/db.json';
 
   // API key para obtener clima (opcional según enunciado)
   private readonly weatherApiKey = '3fb0b08a688a4a9d96c115901260801';
